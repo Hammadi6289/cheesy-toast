@@ -1,0 +1,27 @@
+{#
+    THE product card — one definition for the whole theme.
+
+    The card is the platform's own <falak-product-card>, which is what the home
+    rows already render through <falak-products-list> and
+    <falak-products-slider>. This partial exists so the server-rendered pages
+    (listing, search, brand, wishlist) render the SAME element rather than a
+    second copy of the markup — the theme had two cards before, and the same
+    product wore a different one depending on where a shopper found it.
+
+    The record is handed over as a JSON attribute because these pages already
+    have it from the server; the element therefore paints without a fetch.
+
+        {% include 'pages.partials.product-card' %}
+
+    | product | object | a record already in hand (listing, search, brand…) |
+    | source  | string | analytics label; defaults to the enclosing page     |
+#}
+{# show-add-button / show-wishlist are opt-in on the component: the home
+   rows switch them on through <falak-products-list card-button card-wishlist>,
+   so a card placed here has to ask for them too or it renders with no way to
+   buy and no heart. #}
+<falak-product-card
+    product="{{ product|json_encode|escape('html_attr') }}"
+    show-add-button
+    show-wishlist
+    source="{{ source|default('listing') }}"></falak-product-card>
